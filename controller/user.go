@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bluebellAPI/logic"
 	"bluebellAPI/models"
 	"bluebellAPI/dao/mysql"
 	"errors"
@@ -8,6 +9,10 @@ import (
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
+
+/*
+	user 请求数据接收与响应数据返回的处理
+*/
 
 // SignUpHandler 处理注册请求的函数
 func SignUpHandler(c *gin.Context) {
@@ -28,7 +33,6 @@ func SignUpHandler(c *gin.Context) {
 	}
 
 	// 2.业务处理
-	// TODO: 2021-07-26 start
 	if err := logic.SignUp(p); err != nil {
 		zap.L().Error("logic.SignUp failed", zap.Error(err))
 		if errors.Is(err, mysql.ErrorUserExist){
@@ -36,5 +40,10 @@ func SignUpHandler(c *gin.Context) {
 			return
 		}
 		ResponseError(c, CodeServerBusy)
+		return
 	}
+
+	// 3.返回响应
+	// TODO: 
+	ResponseSuccess(c, nil)
 }
