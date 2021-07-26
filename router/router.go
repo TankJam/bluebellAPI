@@ -1,6 +1,7 @@
 package router
 
 import (
+	"bluebellAPI/controller"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -9,7 +10,7 @@ import (
 func SetupRouter(mode string) *gin.Engine {
 	// 判断mode
 	if mode == gin.ReleaseMode {
-		gin.SetMode(gin.ReleaseMode)  // gin设置成发布模式
+		gin.SetMode(gin.ReleaseMode) // gin设置成发布模式
 	}
 
 	// 1.实例化并获取gin引擎对象
@@ -31,7 +32,7 @@ func SetupRouter(mode string) *gin.Engine {
 	// 7.主页、根据id查询、提交创建文章
 
 	// last: 若路由错误，则返回 404
-	r.NoRoute(func(c *gin.Context){
+	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",
 		})

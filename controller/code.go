@@ -26,7 +26,8 @@ var codeMsgMap = map[ResCode]string{
 	CodeInvalidToken:    "token无效",
 }
 
-// Msg 给ResCode结构体定义方法，用于返回状态码对应的消息
+// Msg 给 ResCode 结构体定义方法，用于返回状态码对应的消息
+/// 也就是上面 const 下的每一个对象都具备对应的类型的Msg方法
 func (c ResCode) Msg() string{
 	msg, ok := codeMsgMap[c]
 	if !ok {  // 若服务出问题，则返回服务繁忙

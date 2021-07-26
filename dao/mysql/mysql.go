@@ -15,7 +15,7 @@ func Init(cfg *settings.MySQLConfig) (err error) {
 	// "user:password@tcp(host:port)/dbname"
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s", cfg.User,
-		cfg.Password, cfg.Host, cfg.Password, cfg.DB,
+		cfg.Password, cfg.Host, cfg.Port, cfg.DB,
 	)
 
 	// 获取连接后的db对象

@@ -30,3 +30,13 @@ func ResponseErrorWithMsg(c *gin.Context, code ResCode, msg interface{}) {
 		Data: nil,
 	})
 }
+
+
+// ResponseSuccess 请求成功返回响应
+func ResponseSuccess(c *gin.Context, data interface{}) {
+	c.JSON(http.StatusOK, &ResponseData{
+		Code: CodeSuccess,
+		Msg:  CodeSuccess.Msg(),
+		Data: data,
+	})
+}

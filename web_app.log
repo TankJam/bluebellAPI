@@ -1,0 +1,5 @@
+{"level":"INFO","time":"2021-07-26T20:45:03.889+0800","caller":"logger/logger.go:54","msg":"info logger success!"}
+{"level":"INFO","time":"2021-07-27T00:55:10.554+0800","caller":"logger/logger.go:54","msg":"info logger success!"}
+{"level":"INFO","time":"2021-07-27T00:56:23.725+0800","caller":"logger/logger.go:54","msg":"info logger success!"}
+{"level":"INFO","time":"2021-07-27T02:02:03.630+0800","caller":"logger/logger.go:54","msg":"info logger success!"}
+{"level":"INFO","time":"2021-07-27T02:08:29.666+0800","caller":"logger/logger.go:54","msg":"info logger success!"}

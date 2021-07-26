@@ -44,6 +44,5 @@ func SignUpHandler(c *gin.Context) {
 	}
 
 	// 3.返回响应
-	// TODO: 
 	ResponseSuccess(c, nil)
 }

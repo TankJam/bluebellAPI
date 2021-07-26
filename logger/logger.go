@@ -2,6 +2,7 @@ package logger
 
 import (
 	"bluebellAPI/settings"
+	"fmt"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -14,9 +15,11 @@ var lg *zap.Logger
 
 // Init 初始化lg
 func Init(cfg *settings.LogConfig, mode string)(err error){
+	fmt.Println(cfg, mode)
 	// 1.得到日志写入器
 	writeSyncer := getLogWrite(
 		cfg.FileName, cfg.MaxAge, cfg.MaxBackups, cfg.MaxSize)
+
 	// 2.获取编码转换之后的对象
 	encoder := getEncoder()
 	// 3.反序列化日志级别格式化
