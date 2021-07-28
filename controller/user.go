@@ -1,9 +1,9 @@
 package controller
 
 import (
+	"bluebellAPI/dao/mysql"
 	"bluebellAPI/logic"
 	"bluebellAPI/models"
-	"bluebellAPI/dao/mysql"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -45,4 +45,42 @@ func SignUpHandler(c *gin.Context) {
 
 	// 3.返回响应
 	ResponseSuccess(c, nil)
+}
+
+// LoginHandler 处理登录请求的函数
+func LoginHandler(c *gin.Context){
+	//1.获取请求的参数
+	p := new(models.ParamLogin)
+
+	// 校验json参数 c.ShouldBindJSON
+	if err := c.ShouldBindJSON(p); err != nil{
+		// 请求参数错误处理  zap.Error(err): 错误数据
+		zap.L().Error("Login with invalid param error", zap.Error(err))
+		// 判断参数是否是validator.ValidationErrors类型
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParam)  // 不是参数校验错误，则返回请求参数错误
+			return
+		}
+		// 参数校验错误，则返回 格式化后 请求参数错误
+		/// errs.Translate(trans)) 将英文的错误信息翻译成中文
+		/// trans 是翻译器
+		ResponseErrorWithMsg(c, CodeInvalidParam, removeTopStruct(errs.Translate(trans)))
+		return
+	}
+
+	// 2.业务逻辑处理
+	token, err := logic.Login(p)
+	if err != nil {
+		//zap.L().Error()
+		zap.L().Error("logic.Login failed", zap.String("username", p.Username), zap.Error(err))
+		// 若用户不存在，则返回不存在的错误信息
+		if errors.Is(err, mysql.ErrorUserNotExist) {
+			ResponseError(c, CodeUserExist)
+			return
+		}
+	}
+
+	// 3.校验通过，返回登录成功以后的认证信息
+	ResponseSuccess(c, token)
 }

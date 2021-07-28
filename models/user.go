@@ -1,8 +1,9 @@
 package models
 
-// user结构体
+
+// User 结构体
 type User struct {
-	UserID   int64 `db:"user_id"`
+	UserID   int64 `db:"user_id"`  // bigint
 	Username string `db:"username"`
 	Password string `db:"password"`
 }

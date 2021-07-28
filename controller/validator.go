@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/zh"
-	"github.com/go-playground/validator/v10"
-	"reflect"
-	"strings"
 	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
 	enTranslations "github.com/go-playground/validator/v10/translations/en"
 	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"reflect"
+	"strings"
 )
 
 // 定义一个全局翻译器T
@@ -65,11 +65,15 @@ func InitTrans(local string) (err error) {
 
 // removeTopStruct 去除提示信息中的结构体名称
 func removeTopStruct(fields map[string]string) map[string]string{
+	fmt.Println(fields, 111111111111111111111111111111111111111111)
 	res := map[string]string{}  // 实例化空map
 	// 将错误信息循环遍历，存入map中
 	for field, err := range fields{
+		fmt.Println(field, err)
 		res[field[strings.Index(field, ".") + 1:]] = err
 	}
+	fmt.Println(res, 333333333333333333333333333333333333333333333)
+
 	return res
 }
 

@@ -26,6 +26,7 @@ func SetupRouter(mode string) *gin.Engine {
 	v1.POST("/signup", controller.SignUpHandler)
 
 	// 5.登录
+	v1.POST("/login", controller.LoginHandler)
 
 	// 6.加载 JWT 认证中间件
 

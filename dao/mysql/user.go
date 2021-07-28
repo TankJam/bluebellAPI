@@ -45,3 +45,26 @@ func encryptPassword(oldPassword string) string {
 	h.Write([]byte(secret))  // 加盐
 	return hex.EncodeToString(h.Sum([]byte(oldPassword)))
 }
+
+// Login 登录数据处理函数
+func Login(user *models.User) (err error) {
+	oldPassword := user.Password  // 登录得密码
+	sqlStr := `SELECT user_id, username, password FROM user WHERE username=?`
+
+	// user更新了里面得密码为数据库查询到得密码
+	err = db.Get(user, sqlStr, user.Username)
+
+	if err != nil {
+		// 查询数据库失败
+		return err
+	}
+
+	// 判断密码是否正确
+	// 传进来得密码
+	password := encryptPassword(oldPassword)
+
+	if password != user.Password {
+		return ErrorInvalidPassword
+	}
+	return
+}

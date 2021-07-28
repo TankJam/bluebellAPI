@@ -1,11 +1,11 @@
-module bluebellAPI // 注意这里，是坑，需要导入本地文件，该地方必须是当前项目名
+module bluebellAPI
 
 go 1.15
 
 require (
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/cosmtrek/air v1.27.3 // indirect
-	github.com/creack/pty v1.1.13 // indirect
+	github.com/creack/pty v1.1.14 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
