@@ -3,10 +3,17 @@ package logger
 import (
 	"bluebellAPI/settings"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"net"
+	"net/http"
+	"net/http/httputil"
 	"os"
+	"runtime/debug"
+	"strings"
+	"time"
 )
 
 // 定义全局的 zap 日志结构体对象
@@ -85,5 +92,77 @@ func getEncoder() zapcore.Encoder{
 }
 
 // GinLogger 接收gin框架默认的日志
+func GinLogger() gin.HandlerFunc {
+	// 请求过来，通过logger记录http请求数据
+	return func(c *gin.Context) {
+		startTime := time.Now()
+		path := c.Request.URL.Path  // URL
+		query := c.Request.URL.RawQuery  // query values
+		c.Next()  // 进入下一个中间件
+		cost := time.Since(startTime) // 获取消耗时间
+		lg.Info(path,
+			zap.Int("status", c.Writer.Status()), // 日志中加入 status
+			zap.String("method", c.Request.Method), // 日志中加入 method
+			zap.String("path", path), // 日志中加入 path
+			zap.String("query", query), // 日志中加入 query
+			zap.String("ip", c.ClientIP()), // 日志中加入 ip
+			zap.String("user-agent", c.Request.UserAgent()), // 日志中加入 UserAgent
+			zap.String("errors", c.Errors.ByType(gin.ErrorTypePrivate).String()), // 日志中加入 errors
+			zap.Duration("status", cost), // 日志中加入 消耗时间
+		)
+	}
+}
 
 // GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志记录
+func GinRecovery(stack bool) gin.HandlerFunc{
+	return func(c *gin.Context) {
+		defer func() {
+			// recover 捕获异常, 需要用panic去检查断开的链接
+			if err := recover(); err != nil {
+				// Check for a broken connection, as it is not really a
+				// condition that warrants a panic stack trace.
+				var brokenPipe bool
+				// 判断异常是否为链接断开
+				if ne, ok := err.(*net.OpError); ok {
+					// 判断是否为系统调度异常
+					if se, ok := ne.Err.(*os.SyscallError); ok {
+						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer"){
+							brokenPipe = true
+						}
+					}
+				}
+
+				// 可以输出请求体信息，以便排错
+				httpRequest, _ := httputil.DumpRequest(c.Request, false)
+
+				if brokenPipe {
+					// true代表是链接错误，打印日志
+					lg.Error(c.Request.URL.Path,
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+					// If the connection is dead, we can't write a status to it.
+					c.Error(err.(error)) // nolint: errcheck
+					c.Abort()
+					return
+				}
+
+				if stack {
+					lg.Error("[Recovery from panic]",
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+						zap.String("stack", string(debug.Stack())),
+					)
+				} else {
+					lg.Error("[Recovery from panic]",
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+				}
+
+				c.AbortWithStatus(http.StatusInternalServerError)  // 返回服务错误状态码 500
+			}
+		}()
+		c.Next()  // 进入下一个中间件
+	}
+}

@@ -65,14 +65,14 @@ func InitTrans(local string) (err error) {
 
 // removeTopStruct 去除提示信息中的结构体名称
 func removeTopStruct(fields map[string]string) map[string]string{
-	fmt.Println(fields, 111111111111111111111111111111111111111111)
+	fmt.Println(fields)
 	res := map[string]string{}  // 实例化空map
 	// 将错误信息循环遍历，存入map中
 	for field, err := range fields{
 		fmt.Println(field, err)
 		res[field[strings.Index(field, ".") + 1:]] = err
 	}
-	fmt.Println(res, 333333333333333333333333333333333333333333333)
+	fmt.Println(res)
 
 	return res
 }

@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
 	"time"
@@ -47,6 +48,26 @@ func GenToken(userID int64, username string) (string, error) {
 
 	// 使用指定的secret签名并获得完整的编码后的字符串token
 	return token.SignedString(mySecret)
+}
+
+// ParseToken 解析JWT校验
+func ParseToken(tokenString string) (*MyClaims, error) {
+	// 解析token
+	var mc = new(MyClaims)
+	// 先做密钥解密
+	token, err := jwt.ParseWithClaims(tokenString, mc, func(token *jwt.Token) (interface{}, error) {
+		return mySecret, nil
+	})
+	// 若密钥解密不通过则返回错误
+	if err != nil{
+		return nil, err
+	}
+	if token.Valid {  // 校验
+		return mc, nil
+	}
+
+	// 若校验不通过则返回错误信息
+	return nil, errors.New("invalid token")
 }
 
 

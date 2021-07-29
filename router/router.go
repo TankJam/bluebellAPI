@@ -2,6 +2,8 @@ package router
 
 import (
 	"bluebellAPI/controller"
+	"bluebellAPI/logger"
+	"bluebellAPI/middlewares"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -17,7 +19,7 @@ func SetupRouter(mode string) *gin.Engine {
 	r := gin.New()
 
 	// 2.加载 日志 中间件
-	//r.Use()
+	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
 	// 3.创建 api v1 路由组
 	v1 := r.Group("/api/v1")
@@ -29,8 +31,13 @@ func SetupRouter(mode string) *gin.Engine {
 	v1.POST("/login", controller.LoginHandler)
 
 	// 6.加载 JWT 认证中间件
+	v1.Use(middlewares.JWTAuthMiddleware())  // 放在登录注册之后
 
 	// 7.主页、根据id查询、提交创建文章
+	{
+		// 主页
+		v1.GET("/community", controller.CommunityHandler)
+	}
 
 	// last: 若路由错误，则返回 404
 	r.NoRoute(func(c *gin.Context) {
