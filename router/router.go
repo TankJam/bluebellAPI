@@ -37,13 +37,17 @@ func SetupRouter(mode string) *gin.Engine {
 	{
 		// 社区主页
 		v1.GET("/community", controller.CommunityHandler)
-
 		// 根据id返回社区
 		// http://127.0.0.1:9527/api/v1/community/1
 		v1.GET("/community/:id", controller.CommunityDetailHandler)
 
 		// 新增帖子
 		v1.POST("/post", controller.CreatePostHandler)
+		// 查询所有帖子
+		v1.GET("/posts", controller.GetPostListHandler)
+		// 根据帖子id查询帖子
+		v1.GET("/post/:id", controller.GetPostDetailHandler)
+
 	}
 
 	// last: 若路由错误，则返回 404
