@@ -48,6 +48,8 @@ func SetupRouter(mode string) *gin.Engine {
 		// 根据帖子id查询帖子
 		v1.GET("/post/:id", controller.GetPostDetailHandler)
 
+		// 投票功能
+		v1.POST("/vote", controller.PostVoteHandler)
 	}
 
 	// last: 若路由错误，则返回 404
