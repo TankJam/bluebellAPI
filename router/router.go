@@ -43,15 +43,16 @@ func SetupRouter(mode string) *gin.Engine {
 
 		// 新增帖子
 		v1.POST("/post", controller.CreatePostHandler)
-		// 查询所有帖子
+		// 查询所有帖子 V1
 		v1.GET("/posts", controller.GetPostListHandler)
 		// 根据帖子id查询帖子
 		v1.GET("/post/:id", controller.GetPostDetailHandler)
+		// 根据时间查询所有帖子 V2
+		v1.GET("/posts2", controller.GetPostListHandler2)
 
 		// 投票功能
 		v1.POST("/vote", controller.PostVoteHandler)
 
-		v1.POST("/vote2", controller.PostVoteHandler)
 	}
 
 	// last: 若路由错误，则返回 404
