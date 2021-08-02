@@ -50,6 +50,8 @@ func SetupRouter(mode string) *gin.Engine {
 
 		// 投票功能
 		v1.POST("/vote", controller.PostVoteHandler)
+
+		v1.POST("/vote2", controller.PostVoteHandler)
 	}
 
 	// last: 若路由错误，则返回 404
