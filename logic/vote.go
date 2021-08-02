@@ -1,8 +1,8 @@
 package logic
 
 import (
+	"bluebellAPI/dao/redis"
 	"bluebellAPI/models"
-	"github.com/go-redis/redis"
 	"go.uber.org/zap"
 	"strconv"
 )

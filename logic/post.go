@@ -2,6 +2,7 @@ package logic
 
 import (
 	"bluebellAPI/dao/mysql"
+	"bluebellAPI/dao/redis"
 	"bluebellAPI/models"
 	"bluebellAPI/pkg/snowflake"
 	"fmt"
@@ -13,7 +14,13 @@ func CreatePost(p *models.Post) (err error) {
 	// 1.生成post id
 	p.ID = snowflake.GenID()
 	// 2.保存到数据库，并返回
-	return mysql.CreatePost(p)
+	err = mysql.CreatePost(p)
+	if err != nil {
+		return err
+	}
+	// 3.创建帖子排行信息
+	err = redis.CreatePost(p.ID)
+	return
 }
 
 
