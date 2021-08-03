@@ -3,6 +3,7 @@ package controller
 import (
 	"bluebellAPI/logic"
 	"bluebellAPI/models"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
@@ -12,6 +13,8 @@ import (
 func PostVoteHandler(c *gin.Context) {
 	// 参数校验
 	p := new(models.ParamVoteData)
+
+	fmt.Println(c.Params)
 
 	if err := c.ShouldBindJSON(p); err != nil {
 		// 错误类型断言，判断是否是参数校验报错

@@ -78,7 +78,16 @@ func GetPostListHandler2(c *gin.Context){
 		ResponseError(c, CodeInvalidParam)
 		return
 	}
-	// TODO: 2021-08-03
+
+	// 更新: 合二为一
+	data, err := logic.GetPostListNew(p)
+
+	if err != nil {
+		zap.L().Error("logic.GetPostList() failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, data)
 }
 
 // GetPostDetailHandler 根据id获取post详情数据
