@@ -15,6 +15,7 @@ require (
 	github.com/go-playground/validator/v10 v10.7.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/golang/mock v1.6.0
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
@@ -22,6 +23,7 @@ require (
 	github.com/sony/sonyflake v1.0.0 // indirect
 	github.com/spf13/viper v1.8.1
 	go.uber.org/zap v1.18.1
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
+	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
+	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 )
